@@ -1,0 +1,17 @@
+Question:
+Document a REST API design for a 'tasks' resource: endpoints, methods, status codes and JSON shapes.
+
+Resource : Task
+
+GET /tasks - fetch all tasks - 200 ok
+GET /tasks/{id} - fetch specific task - 200 OK or 404 Not found
+POST /tasks - creats a new task - 201 created
+PUT /tasks/{id} - update the specific
+DELETE /tasks/{id} - delete specific task - 200 OK or 404 Not found
+
+JSON respresentation:
+{
+    "id" : 101,
+    "title" : "coding",
+    "completed" : false
+}
