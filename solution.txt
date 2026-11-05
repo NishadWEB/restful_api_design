@@ -1,17 +1,174 @@
-Question:
-Document a REST API design for a 'tasks' resource: endpoints, methods, status codes and JSON shapes.
+# RESTful API Design – Tasks Resource
 
-Resource : Task
+## 1. Resource Information
 
-GET /tasks - fetch all tasks - 200 ok
-GET /tasks/{id} - fetch specific task - 200 OK or 404 Not found
-POST /tasks - creats a new task - 201 created
-PUT /tasks/{id} - update the specific
-DELETE /tasks/{id} - delete specific task - 200 OK or 404 Not found
+Resource: Task
 
-JSON respresentation:
+Base URL: `https://api.example.com`
+
+Endpoint: `/tasks`
+
+### Task JSON Structure
+
+```json
 {
-    "id" : 101,
-    "title" : "coding",
-    "completed" : false
+    "id": 101,
+    "title": "Learn Django",
+    "completed": false
 }
+```
+
+- id: Unique task identifier (integer).
+- title: Task name (string, required).
+- completed: Task completion status (boolean).
+
+
+## 2. API Endpoints
+
+### 1. GET /tasks
+
+Description: Retrieve all tasks.
+
+Query Parameters:
+- page: Page number.
+- limit: Number of tasks per page.
+- completed: Filter by completion status.
+
+Example: `GET /tasks?page=1&limit=10&completed=false`
+
+Status: 200 OK
+
+Response:
+```json
+{
+    "count": 2,
+    "next": null,
+    "previous": null,
+    "results": [
+        {
+            "id": 101,
+            "title": "Learn Django",
+            "completed": false
+        }
+    ]
+}
+```
+
+### 2. GET /tasks/{id}
+
+Description: Retrieve a specific task.
+
+Example: `GET /tasks/101`
+
+Status: 200 OK
+
+Response:
+```json
+{
+    "id": 101,
+    "title": "Learn Django",
+    "completed": false
+}
+```
+
+Error: 404 Not Found
+
+### 3. POST /tasks
+
+Description: Create a new task.
+
+Request Body:
+```json
+{
+    "title": "Learn REST API",
+    "completed": false
+}
+```
+
+Status: 201 Created
+
+Response:
+```json
+{
+    "id": 102,
+    "title": "Learn REST API",
+    "completed": false
+}
+```
+
+Error: 400 Bad Request – Invalid or missing fields.
+
+### 4. PUT /tasks/{id}
+
+Description: Completely replace an existing task.
+
+Request Body:
+```json
+{
+    "title": "Learn Django REST Framework",
+    "completed": true
+}
+```
+
+Status: 200 OK
+
+Response:
+```json
+{
+    "id": 101,
+    "title": "Learn Django REST Framework",
+    "completed": true
+}
+```
+
+Errors:
+- 400 Bad Request – Invalid or missing fields.
+- 404 Not Found – Task does not exist.
+
+### 5. PATCH /tasks/{id}
+
+Description: Partially update an existing task.
+
+Request Body:
+```json
+{
+    "completed": true
+}
+```
+
+Status: 200 OK
+
+Response:
+```json
+{
+    "id": 101,
+    "title": "Learn Django",
+    "completed": true
+}
+```
+
+Errors:
+- 400 Bad Request – Invalid field values.
+- 404 Not Found – Task does not exist.
+
+### 6. DELETE /tasks/{id}
+
+Description: Delete a specific task.
+
+Example: `DELETE /tasks/101`
+
+Status: 204 No Content
+
+No response body is returned.
+
+Error: 404 Not Found – Task does not exist.
+
+
+## 4. HTTP Status Codes
+
+200 OK: Request successful.
+201 Created: Resource successfully created.
+204 No Content: Resource successfully deleted.
+400 Bad Request: Invalid request data.
+404 Not Found: Requested resource does not exist.
+422 Unprocessable Content: Request is valid syntactically but contains semantically invalid data.
